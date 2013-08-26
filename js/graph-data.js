@@ -10,9 +10,9 @@ var CreateJson = {
     mainJson:[],
     addJson :function(){
         var min = 1;
-        var max =   10;
+        var max =   500;
 
-        for(var i=0 ; i<10 ; i++)
+        for(var i=0 ; i<500 ; i++)
         {
             var src = Math.round(min + (Math.random()*max));
             var trg = Math.round(min + (Math.random()*max));
