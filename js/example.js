@@ -146,27 +146,29 @@ function init(){
     // load JSON data.
     fd.loadJSON(window.graphJson);
 
-    var startX = -600,
-        initX = startX,
-        initY = -200,
-        diffX = 100,
-        diffY = 100,
-        maxX = 400;
+    var startY = -200,
+        initX = -600,
+        initY = startY,
+        diffX = 150,
+        diffY = 150,
+        maxY = 400;
+
      var count = 0 ;
     jQuery( fd.graph.nodes ).each( function( index, node )
     {
-
         var nodes = node;
-        for(var key in nodes){
-            count++;
 
-            if(initX < maxX)
+        for(var key in nodes){
+
+            count++;
+           /*
+            if(initX < maxX && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
             {
                 nodes[key].pos.x = initX  ;
-               nodes[key].pos.y = initY  ;
+                nodes[key].pos.y = initY  ;
                 initX = initX + diffX ;
             }
-            else if(initX >= maxX)
+            else if(initX >= maxX && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
             {
                 initX = startX ;
                 initY = initY + diffY;
@@ -174,6 +176,60 @@ function init(){
                 nodes[key].pos.y = initY  ;
                 initX = initX + diffX ;
             }
+
+            var pY = nodes[key].pos.y;
+
+            var lastX =nodes[key].pos.x-30;
+            nodes[key].eachAdjacency(function(adj){
+
+
+                var id = adj.nodeTo.id;
+                var subNode = fd.graph.getNode(id);
+
+                if(subNode.pos.x  == 0 && subNode.pos.y ==0)
+                {
+                    subNode.pos.x =  lastX ;
+                    subNode.pos.y = pY + 60;
+                    lastX = lastX + 50;
+
+                }
+
+            })
+
+            */
+            if(initY < maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
+            {
+                nodes[key].pos.x = initX  ;
+                nodes[key].pos.y = initY  ;
+                initY = initY + diffY ;
+            }
+            else if(initY >= maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
+            {
+                initY = startY ;
+                initX = initX + diffX;
+                nodes[key].pos.x = initX  ;
+                nodes[key].pos.y = initY  ;
+                initY = initY + diffY ;
+            }
+
+            var pX = nodes[key].pos.x;
+
+            var lastY =nodes[key].pos.y-30;
+            nodes[key].eachAdjacency(function(adj){
+
+
+                var id = adj.nodeTo.id;
+                var subNode = fd.graph.getNode(id);
+
+                if(subNode.pos.x  == 0 && subNode.pos.y ==0)
+                {
+                    subNode.pos.y =  lastY ;
+                    subNode.pos.x = pX + 60;
+                    lastY = lastY + 50;
+
+                }
+
+            })
 
         }
 
@@ -185,10 +241,10 @@ function init(){
         iter: 40,
         property: 'end',
         onStep: function(perc){
-            Log.write(perc + '% loaded...');
+            Log.write('Network Topology Graph '+perc + '% loaded...');
         },
         onComplete: function(){
-            Log.write('done');
+            Log.write('Network Topology Graph');
             fd.plot();
             console.log(count);
             console.log(new Date());

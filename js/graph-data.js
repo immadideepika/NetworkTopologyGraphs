@@ -10,7 +10,7 @@ var CreateJson = {
     mainJson:[],
     addJson :function(){
         var min = 1;
-        var max =   500;
+        var max =   1500;
 
         for(var i=0 ; i<500 ; i++)
         {
@@ -21,15 +21,15 @@ var CreateJson = {
                 "adjacencies": [
                     {
                         "nodeTo": trg+".0.0.1",
-                        "nodeFrom": src+".0.0.1",
-                        'data':{}
+                        'data':{
+                            'proc':'java'
+                        }
 
                     }
 
                 ],
                 'id' :src+".0.0.1",
                 'name':src+".0.0.1",
-                'proc':'java',
                 'data':{}
 
 
