@@ -14995,7 +14995,7 @@ $jit.ForceDirected.$extend = true;
               img.onload = function() {
                   ctx.drawImage(img, pos.x, pos.y-10,20,20);
                   status = true;
-            //  }
+             }
          // }else {
 
             //  ctx.drawImage(img, pos.x, pos.y-10,20,20);
