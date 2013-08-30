@@ -30,23 +30,23 @@ function init(){
     console.log(new Date());
 
 
-   /*
     $jit.ForceDirected.Plot.NodeTypes.implement({
-        'customNode': {
-            'render': function (node, canvas) {
-                var img = new Image(),
-                    pos = node.pos.getc(true),
-                    ctx = canvas.getCtx();
-
-                img.onload = function () {
-                    ctx.drawImage(img, pos.x - 15, pos.y - 15);
-                };
-
-                img.src = '../screenIcon.PNG';
+        'image': {
+            'render': function(node, canvas){
+                var ctx = canvas.getCtx();
+                var pos = node.pos.getc(true);
+                if( node.getData('image') != 0 ){
+                    var img = node.getData('image');
+                    ctx.drawImage( img, pos.x-15, pos.y-15);
+                }
+            },
+            'contains': function(node,pos){
+                var npos = node.pos.getc(true);
+                dim = node.getData('dim');
+                return this.nodeHelper.circle.contains(npos, pos, dim);
             }
         }
-
-    });   */
+    });
     // init data
     // init ForceDirected
     var fd = new $jit.ForceDirected({
@@ -69,7 +69,7 @@ function init(){
         Node: {
             overridable: true ,
             color:'#FF97D5',
-            type: 'customNode',
+           type: 'customImage',
             dim: 5
         },
         Edge: {
@@ -165,7 +165,6 @@ function init(){
     // load JSON data.
 
 
-    console.log($('#Node-Select')  );
     $('#Node-Select').change(function(){
         if(this.value == '100')
         {

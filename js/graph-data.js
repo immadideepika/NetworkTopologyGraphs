@@ -26,7 +26,8 @@ var CreateJson = {
                     {
                         "nodeTo": trg+".0.0.1",
                         'data':{
-                            'proc':'java'
+                            'proc':'java' ,
+
                         }
 
                     }
@@ -158,7 +159,13 @@ var CreateJson = {
                     {
                         "nodeTo": trg+".0.0.1",
                         'data':{
-                            'proc':'java'
+                            'proc':'java' ,
+
+                            "$color": "#EBB056",
+                            "$type": "image",
+                            "$dim": 7,
+                            "$url":"screenIcon.PNG"  // url of the image
+
                         }
 
                     }

@@ -6169,6 +6169,48 @@ var NodeHelper = {
       return Math.abs(pos.x - npos.x) <= dim && Math.abs(pos.y - npos.y) <= dim;
     }
   },
+    'customImage': {
+        /*
+         Method: render
+
+         Renders a image into the canvas.
+
+         Parameters:
+
+
+         pos - (object) An *x*, *y* object with the position of the center of the square.
+
+         canvas - (object) A <Canvas> instance.
+
+         Example:
+         (start code js)
+         NodeHelper.square.render('stroke', { x: 10, y: 30 }, 40, viz.canvas);
+         (end code)
+         */
+        'render': function(type, pos, dim, canvas){
+            canvas.getCtx()[type + "Rect"](pos.x - dim, pos.y - dim, 2*dim, 2*dim);
+        },
+        /*
+         Method: contains
+
+         Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
+
+         Parameters:
+
+         npos - (object) An *x*, *y* object with the <Graph.Node> position.
+         pos - (object) An *x*, *y* object with the position to check.
+         dim - (number) The radius (or half-diameter) of the square.
+
+         Example:
+         (start code js)
+         NodeHelper.customImage.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30);
+         (end code)
+         */
+        'contains': function(npos, pos, dim){
+            return Math.abs(pos.x - npos.x) <= dim+5 && Math.abs(pos.y - npos.y) <= dim+5;
+
+        }
+    },
   /*
   Object: NodeHelper.rectangle
   */
@@ -14857,8 +14899,9 @@ $jit.ForceDirected.$extend = true;
       });
     (end code)
 
-  */
-  ForceDirected.Plot.NodeTypes = new Class({
+  */ //flag to stop flickering of custom image on dragging. will be set true once the image is loaded.
+    var status=false;
+    ForceDirected.Plot.NodeTypes = new Class({
     'none': {
       'render': $.empty,
       'contains': $.lambda(false)
@@ -14939,26 +14982,33 @@ $jit.ForceDirected.$extend = true;
         return this.nodeHelper.star.contains(npos, pos, dim);
       }
     },
-  'customNode': {
+  'customImage': {
       'render': function (node, canvas) {
           var img = new Image(),
               pos = node.pos.getc(true),
               ctx = canvas.getCtx();
 
-          img.onload = function () {
-              ctx.drawImage(img, pos.x , pos.y-10);
-          };
+          img.src = 'computer_icon.png';
 
-          img.src = 'screenIcon.PNG';
+          if (!status){                                       //
+
+              img.onload = function() {
+                  ctx.drawImage(img, pos.x, pos.y-10,20,20);
+                  status = true;
+              }
+          }else {
+
+              ctx.drawImage(img, pos.x, pos.y-10,20,20);
+          }
       } ,
       'contains': function(node, pos) {
           var npos = node.pos.getc(true),
               dim = node.getData('dim');
-          return this.nodeHelper.square.contains(npos, pos, dim);
+          return this.nodeHelper.customImage.contains(npos, pos, dim);
       }
   }
   });
-    console.log('url(../screenIcon.PNG)');
+
 
   /*
     Class: ForceDirected.Plot.EdgeTypes
