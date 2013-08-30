@@ -69,7 +69,7 @@ function init(){
         Node: {
             overridable: true ,
             color:'#FF97D5',
-            type: 'square',
+            type: 'customNode',
             dim: 5
         },
         Edge: {
@@ -201,6 +201,8 @@ function init(){
             diffX = 100,
             diffY = 150,
             maxY = 400;
+         var prevNodeY = -1000,prevNodeX = -1000;
+         var i =2;
 
 
         jQuery( fd.graph.nodes ).each( function( index, node )
@@ -208,6 +210,8 @@ function init(){
             var nodes = node;
 
             for(var key in nodes){
+
+
 
 
                 if(initY < maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
@@ -218,8 +222,9 @@ function init(){
                 }
                 else if(initY >= maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
                 {
+                    i++;
                     initY = startY ;
-                    initX = initX + diffX+100;
+                    initX = initX + diffX ;
                     nodes[key].pos.x = initX  ;
                     nodes[key].pos.y = initY  ;
                     initY = initY + diffY ;
@@ -227,7 +232,14 @@ function init(){
 
                 var pX = nodes[key].pos.x;
 
-                var lastY =nodes[key].pos.y-60;
+                var lastY =nodes[key].pos.y-65;
+
+                if(prevNodeY > lastY && prevNodeX < pX)
+                {
+                  //  console.log("py:"+prevNodeY+"lY:"+lastY);
+                   // lastY  =   prevNodeY + 100;
+                }
+
                 nodes[key].eachAdjacency(function(adj){
 
 
@@ -236,15 +248,16 @@ function init(){
 
                     if(subNode.pos.x  == 0 && subNode.pos.y ==0)
                     {
-                        subNode.pos.y =  lastY ;
-                        subNode.pos.x = pX + 100;
-                        lastY = lastY + 30;
+                        subNode.pos.y =  prevNodeY =lastY ;
+                        subNode.pos.x = prevNodeX= pX + 100;
+                        lastY = lastY + 55;
 
                     }
 
                 })
 
             }
+
 
         } );
 
