@@ -144,3 +144,11 @@ span.name {
     text-align:center;
     margin-bottom:2px;
 }
+.select-nodes{
+    padding:5px;
+}
+.select-nodes select{
+    width:180px;
+    height: 40px;
+    padding: 10px;
+}

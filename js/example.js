@@ -28,6 +28,25 @@ var Log = {
 
 function init(){
     console.log(new Date());
+
+
+   /*
+    $jit.ForceDirected.Plot.NodeTypes.implement({
+        'customNode': {
+            'render': function (node, canvas) {
+                var img = new Image(),
+                    pos = node.pos.getc(true),
+                    ctx = canvas.getCtx();
+
+                img.onload = function () {
+                    ctx.drawImage(img, pos.x - 15, pos.y - 15);
+                };
+
+                img.src = '../screenIcon.PNG';
+            }
+        }
+
+    });   */
     // init data
     // init ForceDirected
     var fd = new $jit.ForceDirected({
@@ -144,97 +163,94 @@ function init(){
         }
     });
     // load JSON data.
-    fd.loadJSON(window.graphJson);
-
-    var startY = -200,
-        initX = -600,
-        initY = startY,
-        diffX = 150,
-        diffY = 150,
-        maxY = 400;
-
-     var count = 0 ;
-    jQuery( fd.graph.nodes ).each( function( index, node )
-    {
-        var nodes = node;
-
-        for(var key in nodes){
-
-            count++;
-           /*
-            if(initX < maxX && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
-            {
-                nodes[key].pos.x = initX  ;
-                nodes[key].pos.y = initY  ;
-                initX = initX + diffX ;
-            }
-            else if(initX >= maxX && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
-            {
-                initX = startX ;
-                initY = initY + diffY;
-                nodes[key].pos.x = initX  ;
-                nodes[key].pos.y = initY  ;
-                initX = initX + diffX ;
-            }
-
-            var pY = nodes[key].pos.y;
-
-            var lastX =nodes[key].pos.x-30;
-            nodes[key].eachAdjacency(function(adj){
 
 
-                var id = adj.nodeTo.id;
-                var subNode = fd.graph.getNode(id);
-
-                if(subNode.pos.x  == 0 && subNode.pos.y ==0)
-                {
-                    subNode.pos.x =  lastX ;
-                    subNode.pos.y = pY + 60;
-                    lastX = lastX + 50;
-
-                }
-
-            })
-
-            */
-            if(initY < maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
-            {
-                nodes[key].pos.x = initX  ;
-                nodes[key].pos.y = initY  ;
-                initY = initY + diffY ;
-            }
-            else if(initY >= maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
-            {
-                initY = startY ;
-                initX = initX + diffX;
-                nodes[key].pos.x = initX  ;
-                nodes[key].pos.y = initY  ;
-                initY = initY + diffY ;
-            }
-
-            var pX = nodes[key].pos.x;
-
-            var lastY =nodes[key].pos.y-30;
-            nodes[key].eachAdjacency(function(adj){
-
-
-                var id = adj.nodeTo.id;
-                var subNode = fd.graph.getNode(id);
-
-                if(subNode.pos.x  == 0 && subNode.pos.y ==0)
-                {
-                    subNode.pos.y =  lastY ;
-                    subNode.pos.x = pX + 60;
-                    lastY = lastY + 50;
-
-                }
-
-            })
-
+    console.log($('#Node-Select')  );
+    $('#Node-Select').change(function(){
+        if(this.value == '100')
+        {
+            fd.loadJSON(window.graphJsonHundred);
+            caliculatePositions();
+            fd.plot();
         }
+        if(this.value == '200')
+        {
+            fd.loadJSON(window.graphJsonTwoHundred);
+            caliculatePositions();
+            fd.plot();
+        }
+        if(this.value == '500')
+        {
+            fd.loadJSON(window.graphJsonFiveHundred);
+            caliculatePositions();
+            fd.plot();
+        }
+        if(this.value == '1000')
+        {
+            fd.loadJSON(window.graphJsonThousand);
+            caliculatePositions();
+            fd.plot();
+        }
+    })
 
-    } );
+    fd.loadJSON(window.graphJson);
+     function caliculatePositions(){
+        var startY = -200,
+            initX = -600,
+            initY = startY,
+            diffX = 100,
+            diffY = 150,
+            maxY = 400;
 
+
+        jQuery( fd.graph.nodes ).each( function( index, node )
+        {
+            var nodes = node;
+
+            for(var key in nodes){
+
+
+                if(initY < maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
+                {
+                    nodes[key].pos.x = initX  ;
+                    nodes[key].pos.y = initY  ;
+                    initY = initY + diffY ;
+                }
+                else if(initY >= maxY && (nodes[key].pos.x ==0 && nodes[key].pos.y ==0))
+                {
+                    initY = startY ;
+                    initX = initX + diffX+100;
+                    nodes[key].pos.x = initX  ;
+                    nodes[key].pos.y = initY  ;
+                    initY = initY + diffY ;
+                }
+
+                var pX = nodes[key].pos.x;
+
+                var lastY =nodes[key].pos.y-60;
+                nodes[key].eachAdjacency(function(adj){
+
+
+                    var id = adj.nodeTo.id;
+                    var subNode = fd.graph.getNode(id);
+
+                    if(subNode.pos.x  == 0 && subNode.pos.y ==0)
+                    {
+                        subNode.pos.y =  lastY ;
+                        subNode.pos.x = pX + 100;
+                        lastY = lastY + 30;
+
+                    }
+
+                })
+
+            }
+
+        } );
+
+     }
+
+    caliculatePositions();
 
     // compute positions incrementally and animate.
     fd.computeIncremental({
@@ -246,7 +262,6 @@ function init(){
         onComplete: function(){
             Log.write('Network Topology Graph');
             fd.plot();
-            console.log(count);
             console.log(new Date());
 
         }
