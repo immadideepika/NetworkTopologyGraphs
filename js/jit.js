@@ -14990,16 +14990,16 @@ $jit.ForceDirected.$extend = true;
 
           img.src = 'computer_icon.png';
 
-          if (!status){                                       //
+         // if (!status){                                       //
 
               img.onload = function() {
                   ctx.drawImage(img, pos.x, pos.y-10,20,20);
                   status = true;
-              }
-          }else {
+            //  }
+         // }else {
 
-              ctx.drawImage(img, pos.x, pos.y-10,20,20);
-          }
+            //  ctx.drawImage(img, pos.x, pos.y-10,20,20);
+         // }
       } ,
       'contains': function(node, pos) {
           var npos = node.pos.getc(true),
